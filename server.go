@@ -37,7 +37,7 @@ func ListenAndServe(addr, certFile, keyFile string, handler http.Handler) error 
 	}
 
 	tlsListener := tls.NewListener(listener, config)
+	debug(clr.Cyan("listening server %s"), tlsListener.Addr())
 
-	debug("listening server %s", tlsListener.Addr())
 	return nil
 }

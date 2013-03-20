@@ -1,4 +1,4 @@
-package speedy
+package util
 
 import (
 	"fmt"
@@ -16,7 +16,7 @@ func fileformat(file string) (filename string) {
 	return filename
 }
 
-func debug(format string, v ...interface{}) {
+func Debug(format string, v ...interface{}) {
 	if os.Getenv("DEBUG") == "" {
 		return
 	}
