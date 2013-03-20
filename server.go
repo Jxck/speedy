@@ -2,7 +2,6 @@ package speedy
 
 import (
 	"crypto/tls"
-	"fmt"
 	"net"
 	"net/http"
 )
@@ -39,6 +38,6 @@ func ListenAndServe(addr, certFile, keyFile string, handler http.Handler) error 
 
 	tlsListener := tls.NewListener(listener, config)
 
-	fmt.Println(tlsListener.Addr())
+	debug("listening server %s", tlsListener.Addr())
 	return nil
 }

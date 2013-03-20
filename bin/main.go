@@ -26,6 +26,8 @@ var (
 )
 
 // go run bin/main.go :3000
+// or debug mode
+// DEBUG=DEBUG run bin/main.go :3000
 func main() {
 	flag.Parse()
 	port := flag.Args()[0]
