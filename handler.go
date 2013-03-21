@@ -21,14 +21,19 @@ func handleConnection(conn net.Conn) error {
 
 		switch frametype := frame.(type) {
 		case *spdy.SynStreamFrame:
-			synStream := frame.(*spdy.SynStreamFrame)
+			synStream := frametype //frame.(*spdy.SynStreamFrame)
 			debug("recv %v", synStream)
 
-			// Debug data
+			// debug data
+			var ResponseData = "<h1>hello</h1>"
+
 			var HeadersFixture = http.Header{
-				"Url":     []string{"http://localhost:3000/"},
-				"Method":  []string{"get"},
-				"Version": []string{"http/1.1"},
+				":version":       []string{"http/1.1"},
+				":status":        []string{"200 OK"},
+				"location":       []string{"http://localhost:3000/"},
+				"content-type":   []string{"text/html; charset=utf-8"},
+				"content-length": []string{"14"},
+				"server":         []string{"speedy"},
 			}
 
 			// send reply
@@ -47,7 +52,7 @@ func handleConnection(conn net.Conn) error {
 			dataFrame := spdy.DataFrame{
 				StreamId: synStream.StreamId,
 				Flags:    spdy.DataFlagFin,
-				Data:     []byte{'h', 'e', 'l', 'l', 'o'},
+				Data:     []byte(ResponseData),
 			}
 
 			err = framer.WriteFrame(&dataFrame)
@@ -56,7 +61,7 @@ func handleConnection(conn net.Conn) error {
 			}
 
 		default:
-			debug("unknown frame %v", frametype)
+			debug("unknown frame")
 			log.Fatalf("unknown frame %v", frametype)
 		}
 	}
