@@ -1,13 +1,19 @@
 package spdy
 
 import (
-	"net/http"
 	"fmt"
-	"strings"
+	"net/http"
 	"sort"
+	"strings"
 )
 
-func utilArrayJoin(arr []string, sep string) string {
+///////////////////
+// FIXME!!
+///////////////////
+
+// join slice element with separator
+// arrayJoin([a, b, c], ",") => "a, b, c"
+func join(arr []string, sep string) string {
 	var str string
 	length := len(arr) - 1
 	for i, v := range arr {
@@ -20,7 +26,7 @@ func utilArrayJoin(arr []string, sep string) string {
 	return str
 }
 
-func utilFormatHeader(headers http.Header) []string {
+func formatHeader(headers http.Header) []string {
 	arr := make([]string, len(headers))
 	for k, v := range headers {
 		k = strings.ToLower(k)
@@ -30,7 +36,7 @@ func utilFormatHeader(headers http.Header) []string {
 		case "url":
 			k = ":path"
 		}
-		arr = append(arr, fmt.Sprintf("%s: %s\n", k, utilArrayJoin(v, ",")))
+		arr = append(arr, fmt.Sprintf("%s: %s\n", k, join(v, ",")))
 	}
 	sort.Strings(arr)
 	return arr
@@ -38,11 +44,10 @@ func utilFormatHeader(headers http.Header) []string {
 
 func (f *SynStreamFrame) String() string {
 	var str string
-	str += fmt.Sprintf("receive SYN_STREAM frame <version=%d, flags=%d, length=%d>\n", f.CFHeader.version, f.CFHeader.Flags, f.CFHeader.length)
+	str += fmt.Sprintf("\nSYN_STREAM frame <version=%d, flags=%d, length=%d>\n", f.CFHeader.version, f.CFHeader.Flags, f.CFHeader.length)
 
 	str += fmt.Sprintf("(stream_id=%d, assoc_stream_id=%d, pri=%d)\n", f.StreamId, f.AssociatedToStreamId, f.Priority)
-
-	headers := utilFormatHeader(f.Headers)
+	headers := formatHeader(f.Headers)
 
 	for _, v := range headers {
 		str += fmt.Sprintf("%s", v)
