@@ -44,7 +44,7 @@ func formatHeader(headers http.Header) []string {
 
 func (f *SynStreamFrame) String() string {
 	var str string
-	str += fmt.Sprintf("\nSYN_STREAM frame <version=%d, flags=%d, length=%d>\n", f.CFHeader.version, f.CFHeader.Flags, f.CFHeader.length)
+	str += fmt.Sprintf("SYN_STREAM frame <version=%d, flags=%d, length=%d>\n", f.CFHeader.version, f.CFHeader.Flags, f.CFHeader.length)
 
 	str += fmt.Sprintf("(stream_id=%d, assoc_stream_id=%d, pri=%d)\n", f.StreamId, f.AssociatedToStreamId, f.Priority)
 	headers := formatHeader(f.Headers)
