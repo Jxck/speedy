@@ -21,8 +21,8 @@ func handleConnection(conn net.Conn) error {
 
 		switch frametype := frame.(type) {
 		case *spdy.SynStreamFrame:
-			synframe := frame.(*spdy.SynStreamFrame)
-			debug("%v", synframe)
+			synStream := frame.(*spdy.SynStreamFrame)
+			debug("recv %v", synStream)
 
 			// Debug data
 			var HeadersFixture = http.Header{
@@ -32,20 +32,20 @@ func handleConnection(conn net.Conn) error {
 			}
 
 			// send reply
-			synReplyFrame := spdy.SynReplyFrame{
+			synReply := spdy.SynReplyFrame{
 				CFHeader: spdy.ControlFrameHeader{}, //Flag is 0x00
-				StreamId: synframe.StreamId,
+				StreamId: synStream.StreamId,
 				Headers:  HeadersFixture,
 			}
 
-			err := framer.WriteFrame(&synReplyFrame)
+			err := framer.WriteFrame(&synReply)
 			if err != nil {
 				return err
 			}
 
 			// send data
 			dataFrame := spdy.DataFrame{
-				StreamId: synframe.StreamId,
+				StreamId: synStream.StreamId,
 				Flags:    spdy.DataFlagFin,
 				Data:     []byte{'h', 'e', 'l', 'l', 'o'},
 			}
