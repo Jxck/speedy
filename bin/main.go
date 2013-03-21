@@ -21,13 +21,13 @@ var httpHandler http.Handler = &Hello{}
 
 // your cert/key path
 var (
-	cert = "src/github.com/jxck/speedy/bin/keys/cert.pem"
-	key  = "src/github.com/jxck/speedy/bin/keys/key.pem"
+	cert = "keys/cert.pem"
+	key  = "keys/key.pem"
 )
 
 // go run bin/main.go :3000
 // or debug mode
-// DEBUG=DEBUG run bin/main.go :3000
+// DEBUG=DEBUG go run main.go :3000
 func main() {
 	flag.Parse()
 	port := flag.Args()[0]

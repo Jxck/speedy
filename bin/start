@@ -1,0 +1,1 @@
+DEBUG=DEBUG go run main.go :3000
