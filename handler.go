@@ -33,9 +33,7 @@ func handleConnection(conn net.Conn) error {
 
 			// send reply
 			synReplyFrame := spdy.SynReplyFrame{
-				CFHeader: spdy.ControlFrameHeader{
-					Flags: spdy.ControlFlagFin,
-				},
+				CFHeader: spdy.ControlFrameHeader{}, //Flag is 0x00
 				StreamId: synframe.StreamId,
 				Headers:  HeadersFixture,
 			}
@@ -45,7 +43,20 @@ func handleConnection(conn net.Conn) error {
 				return err
 			}
 
+			// send data
+			dataFrame := spdy.DataFrame{
+				StreamId: synframe.StreamId,
+				Flags:    spdy.DataFlagFin,
+				Data:     []byte{'h', 'e', 'l', 'l', 'o'},
+			}
+
+			err = framer.WriteFrame(&dataFrame)
+			if err != nil {
+				return err
+			}
+
 		default:
+			debug("unknown frame %v", frametype)
 			log.Fatalf("unknown frame %v", frametype)
 		}
 	}
