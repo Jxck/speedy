@@ -1,1 +1,1 @@
-DEBUG=DEBUG go run main.go :3000
+DEBUG=DEBUG go run main.go :3000 | catcol
