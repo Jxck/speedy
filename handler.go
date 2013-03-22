@@ -58,6 +58,21 @@ func sendSynReply(header http.Header, framer *spdy.Framer, frame *spdy.SynStream
 	return nil
 }
 
+func sendData(data string, framer *spdy.Framer, frame *spdy.SynStreamFrame) error {
+	dataFrame := spdy.DataFrame{
+		StreamId: frame.StreamId,
+		Flags:    spdy.DataFlagFin,
+		Data:     []byte(data),
+	}
+
+	err := framer.WriteFrame(&dataFrame)
+	if err != nil {
+		return err
+	}
+	debug("send %v", &dataFrame)
+	return nil
+}
+
 func handleSynStreamFrame(framer *spdy.Framer, synStream *spdy.SynStreamFrame) error {
 	debug("recv %v", synStream)
 
@@ -68,17 +83,10 @@ func handleSynStreamFrame(framer *spdy.Framer, synStream *spdy.SynStreamFrame) e
 	}
 
 	// send data
-	dataFrame := spdy.DataFrame{
-		StreamId: synStream.StreamId,
-		Flags:    spdy.DataFlagFin,
-		Data:     []byte(ResponseHtml),
-	}
-
-	err = framer.WriteFrame(&dataFrame)
+	err = sendData(ResponseHtml, framer, synStream)
 	if err != nil {
 		return err
 	}
-	debug("send %v", &dataFrame)
 
 	return nil
 }
