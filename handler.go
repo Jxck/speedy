@@ -21,17 +21,17 @@ var ResponseData = `
 </html>
 `
 
+var HeadersFixture = http.Header{
+	":version":       []string{"http/1.1"},
+	":status":        []string{"200 OK"},
+	"location":       []string{"http://localhost:3000/"},
+	"content-type":   []string{"text/html; charset=utf-8"},
+	"content-length": []string{strconv.Itoa(len(ResponseData))},
+	"server":         []string{"speedy"},
+}
+
 func handleSynStreamFrame(framer *spdy.Framer, synStream *spdy.SynStreamFrame) error {
 	debug("recv %v", synStream)
-
-	var HeadersFixture = http.Header{
-		":version":       []string{"http/1.1"},
-		":status":        []string{"200 OK"},
-		"location":       []string{"http://localhost:3000/"},
-		"content-type":   []string{"text/html; charset=utf-8"},
-		"content-length": []string{strconv.Itoa(len(ResponseData))},
-		"server":         []string{"speedy"},
-	}
 
 	// send reply
 	synReply := spdy.SynReplyFrame{
