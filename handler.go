@@ -5,20 +5,31 @@ import (
 	"log"
 	"net"
 	"net/http"
+	"strconv"
 )
+
+// debug data
+var ResponseData = `
+<html>
+	<head>
+		<title>SPDY</title>
+		<script type="text/javascript" src="test.js"></script>
+	</head>
+	<body>
+		<h1>Speedy :)</h1>
+	</body>
+</html>
+`
 
 func handleSynStreamFrame(framer *spdy.Framer, synStream *spdy.SynStreamFrame) error {
 	debug("recv %v", synStream)
-
-	// debug data
-	var ResponseData = "<h1>hello</h1>"
 
 	var HeadersFixture = http.Header{
 		":version":       []string{"http/1.1"},
 		":status":        []string{"200 OK"},
 		"location":       []string{"http://localhost:3000/"},
 		"content-type":   []string{"text/html; charset=utf-8"},
-		"content-length": []string{"14"},
+		"content-length": []string{strconv.Itoa(len(ResponseData))},
 		"server":         []string{"speedy"},
 	}
 
