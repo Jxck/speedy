@@ -55,3 +55,17 @@ func (f *SynStreamFrame) String() string {
 
 	return str
 }
+
+func (f *SynReplyFrame) String() string {
+	var str string
+	str += fmt.Sprintf("SYN_REPLY frame <version=%d, flags=%d, length=%d>\n", f.CFHeader.version, f.CFHeader.Flags, f.CFHeader.length)
+
+	str += fmt.Sprintf("(stream_id=%d)\n", f.StreamId)
+	headers := formatHeader(f.Headers)
+
+	for _, v := range headers {
+		str += fmt.Sprintf("%s", v)
+	}
+
+	return str
+}
