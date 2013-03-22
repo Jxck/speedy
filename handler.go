@@ -78,7 +78,19 @@ func handleConnection(conn net.Conn) error {
 			if err != nil {
 				return err
 			}
+		case *spdy.SynReplyFrame:
+			debug("recv %v", frametype)
+		case *spdy.RstStreamFrame:
+			debug("recv %v", frametype)
 		case *spdy.SettingsFrame:
+			debug("recv %v", frametype)
+		case *spdy.WindowUpdateFrame:
+			debug("recv %v", frametype)
+		case *spdy.PingFrame:
+			debug("recv %v", frametype)
+		case *spdy.HeadersFrame:
+			debug("recv %v", frametype)
+		case *spdy.DataFrame:
 			debug("recv %v", frametype)
 		default:
 			debug("unknown frame")

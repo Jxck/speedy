@@ -92,3 +92,19 @@ func (f *SettingsFrame) String() string {
 	}
 	return str
 }
+
+func (f *RstStreamFrame) String() string {
+	return "RstStreamFrame"
+}
+
+func (f *WindowUpdateFrame) String() string {
+	return "WindowUpdateFrame"
+}
+
+func (f *PingFrame) String() string {
+	return "PingFrame"
+}
+
+func (f *HeadersFrame) String() string {
+	return "HeadersFrame"
+}
