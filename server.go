@@ -45,7 +45,7 @@ func ListenAndServe(addr, certFile, keyFile string, handler http.Handler) error 
 		if err != nil {
 			return err
 		}
-		handleConnection(conn)
+		go handleConnection(conn)
 	}
 
 	return nil
