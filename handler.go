@@ -43,14 +43,11 @@ var HeadersFixtureJS = http.Header{
 	"server":         []string{"speedy"},
 }
 
-func handleSynStreamFrame(framer *spdy.Framer, synStream *spdy.SynStreamFrame) error {
-	debug("recv %v", synStream)
-
-	// send reply
+func sendSynReply(header http.Header, framer *spdy.Framer, frame *spdy.SynStreamFrame) error {
 	synReply := spdy.SynReplyFrame{
 		CFHeader: spdy.ControlFrameHeader{}, //Flag is 0x00
-		StreamId: synStream.StreamId,
-		Headers:  HeadersFixtureHtml,
+		StreamId: frame.StreamId,
+		Headers:  header,
 	}
 
 	err := framer.WriteFrame(&synReply)
@@ -58,6 +55,17 @@ func handleSynStreamFrame(framer *spdy.Framer, synStream *spdy.SynStreamFrame) e
 		return err
 	}
 	debug("send %v", &synReply)
+	return nil
+}
+
+func handleSynStreamFrame(framer *spdy.Framer, synStream *spdy.SynStreamFrame) error {
+	debug("recv %v", synStream)
+
+	// send reply
+	err := sendSynReply(HeadersFixtureHtml, framer, synStream)
+	if err != nil {
+		return err
+	}
 
 	// send data
 	dataFrame := spdy.DataFrame{
