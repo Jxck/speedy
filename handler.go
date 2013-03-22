@@ -50,6 +50,11 @@ func handleSynStreamFrame(framer *spdy.Framer, synStream *spdy.SynStreamFrame) e
 	return nil
 }
 
+func handleGoAwayFrame(framer *spdy.Framer, goAway *spdy.GoAwayFrame) error {
+	debug("recv %v", goAway)
+	return nil
+}
+
 func handleConnection(conn net.Conn) error {
 	framer, err := spdy.NewFramer(conn, conn)
 	if err != nil {
@@ -65,6 +70,11 @@ func handleConnection(conn net.Conn) error {
 		switch frametype := frame.(type) {
 		case *spdy.SynStreamFrame:
 			err := handleSynStreamFrame(framer, frametype)
+			if err != nil {
+				return err
+			}
+		case *spdy.GoAwayFrame:
+			err := handleGoAwayFrame(framer, frametype)
 			if err != nil {
 				return err
 			}

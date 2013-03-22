@@ -75,3 +75,10 @@ func (f *DataFrame) String() string {
 	str += fmt.Sprintf("DATA frame (stream_id=%d, flags=%d, length=%d)", f.StreamId, f.Flags, len(f.Data))
 	return str
 }
+
+func (f *GoAwayFrame) String() string {
+	var str string
+	str += fmt.Sprintf("GOAWAY frame <status=%d>\n", f.Status)
+	str += fmt.Sprintf("(last_good_stream_id=%d)\n", f.LastGoodStreamId)
+	return str
+}
