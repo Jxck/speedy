@@ -60,6 +60,7 @@ func handleConnection(conn net.Conn) error {
 			if err != nil {
 				return err
 			}
+			debug("send %v", &dataFrame)
 
 		default:
 			debug("unknown frame")

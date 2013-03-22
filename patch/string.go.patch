@@ -69,3 +69,9 @@ func (f *SynReplyFrame) String() string {
 
 	return str
 }
+
+func (f *DataFrame) String() string {
+	var str string
+	str += fmt.Sprintf("DATA frame (stream_id=%d, flags=%d, length=%d)", f.StreamId, f.Flags, len(f.Data))
+	return str
+}
