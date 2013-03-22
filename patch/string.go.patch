@@ -82,3 +82,13 @@ func (f *GoAwayFrame) String() string {
 	str += fmt.Sprintf("(last_good_stream_id=%d)\n", f.LastGoodStreamId)
 	return str
 }
+
+func (f *SettingsFrame) String() string {
+	var str string
+	str += "SETTINGS frame\n"
+	str += fmt.Sprintf("(niv=%d)\n", len(f.FlagIdValues))
+	for _, fiv := range f.FlagIdValues {
+		str += fmt.Sprintf("[%d(%d):%d]\n", fiv.Id, fiv.Flag, fiv.Value)
+	}
+	return str
+}

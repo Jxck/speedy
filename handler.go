@@ -78,6 +78,8 @@ func handleConnection(conn net.Conn) error {
 			if err != nil {
 				return err
 			}
+		case *spdy.SettingsFrame:
+			debug("recv %v", frametype)
 		default:
 			debug("unknown frame")
 			log.Fatalf("unknown frame %v", frametype)
