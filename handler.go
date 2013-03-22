@@ -9,7 +9,7 @@ import (
 )
 
 // debug data
-var ResponseData = `
+var ResponseHtml = `
 <html>
 	<head>
 		<title>SPDY</title>
@@ -21,12 +21,25 @@ var ResponseData = `
 </html>
 `
 
-var HeadersFixture = http.Header{
+var HeadersFixtureHtml = http.Header{
 	":version":       []string{"http/1.1"},
 	":status":        []string{"200 OK"},
 	"location":       []string{"http://localhost:3000/"},
 	"content-type":   []string{"text/html; charset=utf-8"},
-	"content-length": []string{strconv.Itoa(len(ResponseData))},
+	"content-length": []string{strconv.Itoa(len(ResponseHtml))},
+	"server":         []string{"speedy"},
+}
+
+var ResponseJS = `
+console.log("Speedy");
+`
+
+var HeadersFixtureJS = http.Header{
+	":version":       []string{"http/1.1"},
+	":status":        []string{"200 OK"},
+	"location":       []string{"http://localhost:3000/test.js"},
+	"content-type":   []string{"text/html; charset=utf-8"},
+	"content-length": []string{strconv.Itoa(len(ResponseJS))},
 	"server":         []string{"speedy"},
 }
 
@@ -37,7 +50,7 @@ func handleSynStreamFrame(framer *spdy.Framer, synStream *spdy.SynStreamFrame) e
 	synReply := spdy.SynReplyFrame{
 		CFHeader: spdy.ControlFrameHeader{}, //Flag is 0x00
 		StreamId: synStream.StreamId,
-		Headers:  HeadersFixture,
+		Headers:  HeadersFixtureHtml,
 	}
 
 	err := framer.WriteFrame(&synReply)
@@ -50,7 +63,7 @@ func handleSynStreamFrame(framer *spdy.Framer, synStream *spdy.SynStreamFrame) e
 	dataFrame := spdy.DataFrame{
 		StreamId: synStream.StreamId,
 		Flags:    spdy.DataFlagFin,
-		Data:     []byte(ResponseData),
+		Data:     []byte(ResponseHtml),
 	}
 
 	err = framer.WriteFrame(&dataFrame)
@@ -58,6 +71,7 @@ func handleSynStreamFrame(framer *spdy.Framer, synStream *spdy.SynStreamFrame) e
 		return err
 	}
 	debug("send %v", &dataFrame)
+
 	return nil
 }
 
