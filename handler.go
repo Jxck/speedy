@@ -160,34 +160,34 @@ func handleConnection(conn net.Conn) error {
 			return err
 		}
 
-		switch frametype := frame.(type) {
+		switch frame := frame.(type) { // decide type
 		case *spdy.SynStreamFrame:
-			err := handleSynStreamFrame(framer, frametype)
+			err := handleSynStreamFrame(framer, frame)
 			if err != nil {
 				return err
 			}
 		case *spdy.GoAwayFrame:
-			err := handleGoAwayFrame(framer, frametype)
+			err := handleGoAwayFrame(framer, frame)
 			if err != nil {
 				return err
 			}
 		case *spdy.SynReplyFrame:
-			debug("recv %v", frametype)
+			debug("recv %v", frame)
 		case *spdy.RstStreamFrame:
-			debug("recv %v", frametype)
+			debug("recv %v", frame)
 		case *spdy.SettingsFrame:
-			debug("recv %v", frametype)
+			debug("recv %v", frame)
 		case *spdy.WindowUpdateFrame:
-			debug("recv %v", frametype)
+			debug("recv %v", frame)
 		case *spdy.PingFrame:
-			debug("recv %v", frametype)
+			debug("recv %v", frame)
 		case *spdy.HeadersFrame:
-			debug("recv %v", frametype)
+			debug("recv %v", frame)
 		case *spdy.DataFrame:
-			debug("recv %v", frametype)
+			debug("recv %v", frame)
 		default:
 			debug("unknown frame")
-			log.Fatalf("unknown frame %v", frametype)
+			log.Fatalf("unknown frame %v", frame)
 		}
 	}
 	return nil
