@@ -93,7 +93,6 @@ func (r ResponseWriter) WriteHeader(i int) {
 }
 
 func handleSynStreamFrame(framer *spdy.Framer, synStream *spdy.SynStreamFrame) error {
-	debug("recv %v", synStream.Headers)
 
 	method := synStream.Headers.Get(":method")
 	path := synStream.Headers.Get(":path")
@@ -104,8 +103,7 @@ func handleSynStreamFrame(framer *spdy.Framer, synStream *spdy.SynStreamFrame) e
 	}
 
 	res := ResponseWriter{}
-	debug("%v", req)
-	debug("%v", res)
+	_, _ = req, res
 
 	// send reply
 	err = sendSynStream(HeadersFixtureJS, framer, synStream)
