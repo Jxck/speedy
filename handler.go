@@ -140,6 +140,7 @@ func handleGoAwayFrame(framer *spdy.Framer, goAway *spdy.GoAwayFrame) error {
 }
 
 func handleConnection(conn net.Conn) error {
+	defer conn.Close()
 	framer, err := spdy.NewFramer(conn, conn)
 	if err != nil {
 		return err
