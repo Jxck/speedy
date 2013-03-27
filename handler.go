@@ -2,6 +2,7 @@ package speedy
 
 import (
 	"code.google.com/p/go.net/spdy"
+	"io"
 	"log"
 	"net"
 	"net/http"
@@ -50,6 +51,7 @@ var HeadersFixtureJS = http.Header{
 }
 
 func sendSynReply(header http.Header, framer *spdy.Framer, frame *spdy.SynStreamFrame) error {
+
 	synReply := spdy.SynReplyFrame{
 		CFHeader: spdy.ControlFrameHeader{}, // Flag is 0x00
 		StreamId: frame.StreamId,
@@ -113,11 +115,42 @@ func pushData(data string, framer *spdy.Framer, frame *spdy.SynStreamFrame) erro
 	return nil
 }
 
+type HandleHello struct{}
+
+func (h HandleHello) ServeHTTP(w http.ResponseWriter, req *http.Request) {
+	io.WriteString(w, "hello")
+}
+
+type ResponseWriter struct{}
+
+func (r ResponseWriter) Header() http.Header {
+	return http.Header{}
+}
+
+func (r ResponseWriter) Write(b []byte) (int, error) {
+	return 1, nil
+}
+
+func (r ResponseWriter) WriteHeader(i int) {
+}
+
 func handleSynStreamFrame(framer *spdy.Framer, synStream *spdy.SynStreamFrame) error {
-	debug("recv %v", synStream)
+	debug("recv %v", synStream.Headers)
+
+	method := synStream.Headers.Get(":method")
+	path := synStream.Headers.Get(":path")
+	pipeReader, _ := io.Pipe()
+	req, err := http.NewRequest(method, path, pipeReader)
+	if err != nil {
+		return err
+	}
+
+	res := ResponseWriter{}
+	debug("%v", req)
+	debug("%v", res)
 
 	// send reply
-	err := sendSynStream(HeadersFixtureJS, framer, synStream)
+	err = sendSynStream(HeadersFixtureJS, framer, synStream)
 	if err != nil {
 		return err
 	}
