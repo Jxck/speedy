@@ -1,7 +1,7 @@
 package speedy
 
 import (
-	"code.google.com/p/go.net/spdy"
+	"github.com/jxck/speedy/spdy"
 	"io"
 	"log"
 	"net"
