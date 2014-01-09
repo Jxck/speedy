@@ -3,7 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/jxck/speedy"
+	"github.com/Jxck/speedy"
 	"log"
 	"net/http"
 )
