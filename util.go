@@ -1,7 +1,7 @@
 package speedy
 
 import (
-	"github.com/jxck/speedy/util"
+	"github.com/Jxck/speedy/util"
 )
 
 // import util's
